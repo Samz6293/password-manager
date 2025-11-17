@@ -22,7 +22,9 @@ def main():
         sys.exit("Program ended by user.")
 
 def write_pass():
-    print("Write Mode")
+    print()
+    print("~~~~~Write Mode~~~~~")
+    print()
 
     # Taking the inputs
     account = input("Password for account: ")
@@ -40,18 +42,64 @@ def write_pass():
     # Calling save to save the file
     save(account,password,file)
 
+def get_length():
+    while True:
+        try:
+            length = int(input("What should be the length of your pass? "))
+            if length <= 0:
+                print("please enter a valid non-negative number")
+            else:
+                return length
+        except ValueError:
+            print("please enter a number")
+
+def get_yes_no():
+    while True:
+        choice = input("(Y/N)? ").strip().lower()
+
+        if choice == "y":
+            return True
+        elif choice == "n":
+            return False
+        else:
+            print("please type \"Y\" or \"N\"")
+
 
 def generate_pass():
-    print("Generate Mode")
+    print()
+    print("~~~~~Generate Mode~~~~~")
+    print()
 
-    length = int(input("What should be the length of your password? "))
-    numbers = input("Password should include numbers(Y/N)? ")
-    specials = input("Password should include special characters(Y/N)? ")
+    account = input("Password for account: ")
+
+    #Password generation info
+    length = get_length()
+    print("Password should include numbers?")
+    numbers = get_yes_no()
+    print("Password should include special characters")
+    specials = get_yes_no()
+    #print(f"length: {length}, numbers: {numbers}, specials: {specials}")
+
+
+
+    """chars = string.ascii_letters
+    if numbers == "y":
+        chars = chars + string.digits
+    if specials == "y":
+        chars = chars + string.punctuation
+
+    generated_password = """""
+
+
+
 
 
 
 def view_pass():
-    print("View Mode")
+    print()
+    print("~~~~~View Mode~~~~~")
+    print()
+
 def save(account,password,file):
     ...
 if __name__ == "__main__":
