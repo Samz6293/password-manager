@@ -21,6 +21,10 @@ def main():
     else:
         sys.exit("Program ended by user.")
 
+
+
+
+
 def write_pass():
     print()
     print("~~~~~Write Mode~~~~~")
@@ -31,16 +35,21 @@ def write_pass():
     password = input("Type password: ")
 
     # Printing what we wrote
+    print()
+    print("~~~~~~~~~~~~~~~~~~~~~")
     print(f"Account: {account}")
     print(f"Password: {password}")
+    print("~~~~~~~~~~~~~~~~~~~~~")
+    print()
 
-    # Generating a csv file with desired name
-    file = input("(Without extensions) Select file name to save password: ")
-    file = file.replace(".", "") + ".csv"
-    #print(file)
 
     # Calling save to save the file
-    save(account,password,file)
+    save(account,password)
+
+
+
+
+
 
 def get_length():
     while True:
@@ -55,12 +64,15 @@ def get_length():
 
 def get_yes_no():
     while True:
+
         choice = input("(Y/N)? ").strip().lower()
 
         if choice == "y":
             return True
+
         elif choice == "n":
             return False
+
         else:
             print("please type \"Y\" or \"N\"")
 
@@ -74,21 +86,42 @@ def generate_pass():
 
     #Password generation info
     length = get_length()
-    print("Password should include numbers?")
+    print("Password should include numbers?", end = "")
     numbers = get_yes_no()
-    print("Password should include special characters")
+    print("Password should include special characters", end = "")
     specials = get_yes_no()
     #print(f"length: {length}, numbers: {numbers}, specials: {specials}")
 
 
 
-    """chars = string.ascii_letters
-    if numbers == "y":
+    #What we generate the password from
+    chars = string.ascii_letters
+    if numbers:
         chars = chars + string.digits
-    if specials == "y":
+    if specials:
         chars = chars + string.punctuation
+    chars = list(chars)
+    random.shuffle(chars)
 
-    generated_password = """""
+
+
+    #Generating the password
+    generated_password = ""
+    randomnum = ""
+    for _ in range(length):
+        n = random.randint(0,len(chars)-1)
+        generated_password += chars[n]
+        #randomnum += str(n) + ","
+
+    #print(chars)
+    #print(randomnum)
+    #print(generated_password)
+    print()
+    print("~~~~~~~~~~~~~~~~~~~~~")
+    print(f"Account: {account}")
+    print(f"Password: {generated_password}")
+    print("~~~~~~~~~~~~~~~~~~~~~")
+    print()
 
 
 
@@ -100,7 +133,7 @@ def view_pass():
     print("~~~~~View Mode~~~~~")
     print()
 
-def save(account,password,file):
+def save(account,password):
     ...
 if __name__ == "__main__":
     main()
