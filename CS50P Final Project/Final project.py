@@ -1,4 +1,5 @@
-import sys,random,string
+import sys,random,string,csv
+from tabulate import tabulate
 
 def main():
 
@@ -180,9 +181,60 @@ def view_pass():
     print("~~~~~View Mode~~~~~")
     print()
 
+    print("Please type the master password: ", end = "")
+    attempts = 3
+
+    while attempts != 0:
+        master_password = input().strip()
+
+        if master_password != "6293":
+            attempts -= 1
+            print(f"Wrong Password! {attempts} attempt(s) remaining!")
+        else:
+            break
+
+    if attempts == 0:
+        sys.exit("Too many wrong attempts! Maybe you are an impostor!")
+
+
+
+    print("Would you like to (D)ecrypt a password or (V)iew a file?")
+    while True:
+        choice = input("(D/V)? ").strip().lower()
+
+        if choice == "d":
+            password = input("Type the password to decrypt: ").strip()
+            print(f"Decrypted Password: {decrypted_password(password)}")
+            break
+        elif choice == "v":
+            while True:
+                file_name = input("Please input file name(with extensions):")
+                try:
+                    with open(file_name, "r", encoding="utf-8", newline="") as file:
+                        file = csv.reader(file)
+                        headers = ["Account", "Password"]
+                        print(tabulate(file, headers, tablefmt="grid"))
+                        break
+                except FileNotFoundError:
+                    print("File was not found.")
+            break
+        else:
+            print("please type (D) or (V)")
+
+
+
+
+
+
+
 def save(account,password):
-    file = input("(Without extensions) Select file name to save password: ")
-    file = file.replace(".", "") + ".csv"
+
+    file_name = input("(Without extensions) Select file name to save password: ")
+    file_name = file_name.replace(".", "") + ".csv"
+
+    with open(file_name, "a", encoding="utf-8", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow([account,password])
 
 
 if __name__ == "__main__":
