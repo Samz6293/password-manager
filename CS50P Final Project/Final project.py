@@ -4,7 +4,7 @@ def main():
 
     try:
         print("Would you like to (W)rite, (G)enerate or (V)iew password? (Q) exits the program")
-        mode = input('Select mode:').strip().lower()
+        mode = input("Select mode: ").strip().lower()
         if not mode in ["w","g","v","q"]:
             raise ValueError
 
@@ -13,9 +13,23 @@ def main():
     #print(mode)
 
     if mode == "w":
-        write_pass()
+
+        account, password = write_pass()
+        encrypted_password = caesar_cipher(password)
+        save(account, encrypted_password)
+
+        """
+        decrypted = decrypted_password(encrypted_password)
+        print(f"Account: {account}, Pass: {password}, Encrypted Pass: {encrypted_password}, Decrypted Password: {decrypted}")
+        """
     elif mode == "g":
-        generate_pass()
+        account, password = generate_pass()
+        encrypted_password = caesar_cipher(password)
+        save(account,encrypted_password)
+        """
+        decrypted = decrypted_password(encrypted_password)
+        print( f"Account: {account}, Pass: {password}, Encrypted Pass: {encrypted_password}, Decrypted Password: {decrypted}")
+        """
     elif mode == "v":
         view_pass()
     else:
@@ -24,8 +38,8 @@ def main():
 
 
 
-
 def write_pass():
+
     print()
     print("~~~~~Write Mode~~~~~")
     print()
@@ -34,6 +48,7 @@ def write_pass():
     account = input("Password for account: ")
     password = input("Type password: ")
 
+    """
     # Printing what we wrote
     print()
     print("~~~~~~~~~~~~~~~~~~~~~")
@@ -41,12 +56,10 @@ def write_pass():
     print(f"Password: {password}")
     print("~~~~~~~~~~~~~~~~~~~~~")
     print()
-
+    """
 
     # Calling save to save the file
-    save(account,password)
-
-
+    return account,password
 
 
 
@@ -61,6 +74,7 @@ def get_length():
                 return length
         except ValueError:
             print("please enter a number")
+
 
 def get_yes_no():
     while True:
@@ -107,12 +121,14 @@ def generate_pass():
 
     #Generating the password
     generated_password = ""
-    randomnum = ""
+    #randomnum = ""
     for _ in range(length):
         n = random.randint(0,len(chars)-1)
         generated_password += chars[n]
         #randomnum += str(n) + ","
 
+
+    """
     #print(chars)
     #print(randomnum)
     #print(generated_password)
@@ -122,9 +138,40 @@ def generate_pass():
     print(f"Password: {generated_password}")
     print("~~~~~~~~~~~~~~~~~~~~~")
     print()
+    """
+
+    return account,generated_password
 
 
 
+
+def caesar_cipher(password):
+
+    encrypted_password = ""
+
+    for char in password:
+
+        char_ascii = ord(char)
+        encrypted = char_ascii + 6293
+
+        encrypted_password += chr(encrypted)
+
+    return encrypted_password
+
+
+
+def decrypted_password(password):
+
+    decrypted_password = ""
+
+    for char in password:
+
+        char_ascii = ord(char)
+        encrypted = char_ascii - 6293
+
+        decrypted_password += chr(encrypted)
+
+    return decrypted_password
 
 
 
@@ -134,6 +181,9 @@ def view_pass():
     print()
 
 def save(account,password):
-    ...
+    file = input("(Without extensions) Select file name to save password: ")
+    file = file.replace(".", "") + ".csv"
+
+
 if __name__ == "__main__":
     main()
