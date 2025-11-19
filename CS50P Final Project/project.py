@@ -230,8 +230,8 @@ def save(account,password):
 
 # Shows the info provided and program ends
 def info_given(account, password, encrypted_password, file_name):
-    print()
 
+    print()
     print("====================================")
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     print(f"Account      : {account}")
