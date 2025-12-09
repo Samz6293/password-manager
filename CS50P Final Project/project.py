@@ -158,6 +158,7 @@ def view_pass():
         # Keeps asking user to type correct version
         else:
             print("please type (D) or (V)")
+    stop()
 
 
 
@@ -241,6 +242,15 @@ def info_given(account, password, encrypted_password, file_name):
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     print("====================================")
     print()
+    stop()
+
+def stop():
+
+    while True:
+        exit_program = input("Press Q to exit program: ").lower()
+        if exit_program == "q":
+            break
+    sys.exit()
 
 
 
