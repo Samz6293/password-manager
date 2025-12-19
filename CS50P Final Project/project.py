@@ -3,40 +3,40 @@ from tabulate import tabulate
 
 def main():
 
-    print("Would you like to (W)rite, (G)enerate or (V)iew password? (Q) exits the program")
+    while True:
+        print("Would you like to (W)rite, (G)enerate or (V)iew password? (Q) exits the program")
 
-    # Asks for correct mode of program, wrong input exits the program
-    try:
-        mode = input("Select mode: ").strip().lower()
-        if not mode in ["w","g","v","q"]:
-            raise ValueError
+        # Asks for correct mode of program, wrong input exits the program
+        try:
+            mode = input("Select mode: ").strip().lower()
+            if not mode in ["w", "g", "v", "q"]:
+                raise ValueError
 
-    except ValueError:
-        sys.exit("Invalid input")
+        except ValueError:
+            sys.exit("Invalid input")
 
+        # Program goes to different modes as per user input
+        if mode == "w":
 
-    # Program goes to different modes as per user input
-    if mode == "w":
-
-        account, password = write_pass()
-        encrypted_password = caesar_cipher(password)
-        file_name = save(account, encrypted_password)
-        info_given(account, password, encrypted_password, file_name)
-
-
-    elif mode == "g":
-
-        account, password = generate_pass()
-        encrypted_password = caesar_cipher(password)
-        file_name = save(account,encrypted_password)
-        info_given(account, password, encrypted_password, file_name)
+            account, password = write_pass()
+            encrypted_password = caesar_cipher(password)
+            file_name = save(account, encrypted_password)
+            info_given(account, password, encrypted_password, file_name)
 
 
-    elif mode == "v":
-        view_pass()
+        elif mode == "g":
 
-    else:
-        sys.exit("Program ended by user.")
+            account, password = generate_pass()
+            encrypted_password = caesar_cipher(password)
+            file_name = save(account, encrypted_password)
+            info_given(account, password, encrypted_password, file_name)
+
+
+        elif mode == "v":
+            view_pass()
+
+        else:
+            sys.exit("Program ended by user.")
 
 
 
@@ -158,7 +158,7 @@ def view_pass():
         # Keeps asking user to type correct version
         else:
             print("please type (D) or (V)")
-    stop()
+    #stop()
 
 
 
@@ -242,15 +242,15 @@ def info_given(account, password, encrypted_password, file_name):
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     print("====================================")
     print()
-    stop()
+    #stop()
 
-def stop():
+'''def stop():
 
     while True:
         exit_program = input("Press Q to exit program: ").lower()
         if exit_program == "q":
             break
-    sys.exit()
+    sys.exit()'''
 
 
 
