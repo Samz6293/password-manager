@@ -1,6 +1,8 @@
-import sys,random,string,csv
+import sys, random, string, csv
 from tabulate import tabulate
+from helpers import get_length, get_yes_no, info_given
 
+FILE_NAME = "passwords.csv"
 def main():
 
     while True:
@@ -9,7 +11,7 @@ def main():
         # Asks for correct mode of program, wrong input exits the program
         try:
             mode = input("Select mode: ").strip().lower()
-            if not mode in ["w", "g", "v", "q"]:
+            if not mode in ["w", "g", "v", "q", "d"]:
                 raise ValueError
 
         except ValueError:
@@ -34,11 +36,16 @@ def main():
 
         elif mode == "v":
             view_pass()
+        
+        elif mode == "d":
+            decrypt_pass()
 
         else:
             sys.exit("Program ended by user.")
 
-
+        out = input("Press any key to continue or \"Q\" to quit: ").lower()
+        if out == "q":
+            sys.exit("Thank you for using password manager!")
 
 
 def write_pass():
@@ -53,7 +60,7 @@ def write_pass():
     password = input("Type password: ")
 
 
-    return account,password
+    return account, password
 
 
 
@@ -94,8 +101,15 @@ def generate_pass():
         #randomnum += str(n) + ","
 
 
-    return account,generated_password
+    return account, generated_password
 
+def decrypt_pass():
+    print()
+    print("~~~~~Decrypt Mode~~~~~")
+    print()
+
+    password = input("Type the password to decrypt: ").strip()
+    print(f"Decrypted Password: {decrypted_password(password)}")
 
 def view_pass():
     print()
@@ -118,77 +132,19 @@ def view_pass():
     if attempts == 0: # After 3 attempts file stops
         sys.exit("Too many wrong attempts! Maybe you are an impostor!")
 
+    
+    with open(FILE_NAME, "r", encoding="utf-8", newline="") as file:
+        items = []
+        reader = csv.reader(file)
+        for account, password in reader:
+            items.append([account,decrypted_password(password)])
+        
+        headers = ["Account", "Password"]
+        print(tabulate(items, headers, tablefmt="heavy_outline"))
+    
 
 
-    # View a whole file or just decrypt 1 password
-    print("Would you like to (D)ecrypt a password or (V)iew a file?")
-    while True:
-        choice = input("(D/V)? ").strip().lower()
-
-
-        # Prints the password given decrypted, program ends after execution
-        if choice == "d":
-            password = input("Type the password to decrypt: ").strip()
-            print(f"Decrypted Password: {decrypted_password(password)}")
-            break
-
-
-        # Prints the file in a table with all passwords decrypted, program ends after execution
-        elif choice == "v":
-            while True:
-                file_name = input("Please input file name(without extensions): ")
-                file_name = file_name + ".csv"
-
-                try:
-                    items = []
-                    with open(file_name, "r", encoding="utf-8", newline="") as file:
-
-                        reader = csv.reader(file)
-                        for account,password in reader:
-                            items.append([account,decrypted_password(password)])
-
-                        headers = ["Account", "Password"]
-                        print(tabulate(items, headers, tablefmt="heavy_outline"))
-                        break
-                except FileNotFoundError: #Keeps asking for file if not found
-                    print("File was not found.")
-            break
-
-
-        # Keeps asking user to type correct version
-        else:
-            print("please type (D) or (V)")
-    #stop()
-
-
-
-def get_length():
-    while True:
-        try:
-            length = int(input("What should be the length of your pass? "))
-            if length <= 0:
-                print("please enter a valid non-negative number")
-            else:
-                return length
-        except ValueError:
-            print("please enter a number")
-
-def get_yes_no():
-    while True:
-
-        choice = input("(Y/N)? ").strip().lower()
-
-        if choice == "y":
-            return True
-
-        elif choice == "n":
-            return False
-
-        else:
-            print("please type \"Y\" or \"N\"")
-
-
-# Encrypts the password
+# Encryption
 def caesar_cipher(password):
 
     encrypted_password = ""
@@ -202,7 +158,8 @@ def caesar_cipher(password):
 
     return encrypted_password
 
-# Decrypts the password
+
+# Decryption
 def decrypted_password(password):
 
     decrypted_pass = ""
@@ -220,39 +177,11 @@ def decrypted_password(password):
 # Saves the given info in desired file
 def save(account,password):
 
-    file_name = input("(Without extensions) Select file name to save password: ")
-    file_name = file_name.replace(".", "") + ".csv"
-
-    with open(file_name, "a", encoding="utf-8", newline="") as file:
+    with open(FILE_NAME, "a", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
         writer.writerow([account,password])
 
-    return file_name
-
-# Shows the info provided and program ends
-def info_given(account, password, encrypted_password, file_name):
-
-    print()
-    print("====================================")
-    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-    print(f"Account      : {account}")
-    print(f"Password     : {password}")
-    print(f"Encrypted to : {encrypted_password}")
-    print(f"Saved to     : {file_name}")
-    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-    print("====================================")
-    print()
-    #stop()
-
-'''def stop():
-
-    while True:
-        exit_program = input("Press Q to exit program: ").lower()
-        if exit_program == "q":
-            break
-    sys.exit()'''
-
-
+    return FILE_NAME
 
 if __name__ == "__main__":
     main()
